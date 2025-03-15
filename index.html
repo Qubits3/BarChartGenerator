@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bar Chart Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        #chartContainer {
+            width: 60%;
+            margin: auto;
+        }
+
+        .inputField {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bar Chart Generator</h1>
+
+    <div class="inputField">
+        <label for="barValue">Enter a Bar Value:</label>
+        <input type="number" id="barValue" placeholder="Value">
+    </div>
+
+    <div class="inputField">
+        <label for="barLabel">Enter Bar Label:</label>
+        <input type="text" id="barLabel" placeholder="Label">
+    </div>
+
+    <div class="inputField">
+        <label for="barColor">Choose Bar Colour (optional):</label>
+        <input type="color" id="barColor" value="#0000FF">
+    </div>
+
+    <button onclick="addData()">Add Data</button>
+    <button onclick="resetChart()">Reset</button>
+
+    <div id="chartContainer">
+        <canvas id="barChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('barChart').getContext('2d');
+        var barChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Bar Chart',
+                    data: [],
+                    backgroundColor: []
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function addData() {
+            var value = document.getElementById('barValue').value;
+            var label = document.getElementById('barLabel').value;
+            var color = document.getElementById('barColor').value || '#0000FF'; // default blue color
+
+            if (value && label) {
+                barChart.data.labels.push(label);
+                barChart.data.datasets[0].data.push(value);
+                barChart.data.datasets[0].backgroundColor.push(color);
+                barChart.update();
+
+                // Clearing the inputs
+                document.getElementById('barValue').value = '';
+                document.getElementById('barLabel').value = '';
+            }
+        }
+
+        function resetChart() {
+            barChart.data.labels = [];
+            barChart.data.datasets[0].data = [];
+            barChart.data.datasets[0].backgroundColor = [];
+            barChart.update();
+        }
+    </script>
+</body>
+</html>
